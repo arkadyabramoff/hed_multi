@@ -250,14 +250,11 @@ export const WalletConnectClient = () => {
     if (accountId) {
       setAccountId(accountId);
       setIsConnected(true);
-      // Get wallet info from the session (declare only once)
+      // Get wallet info from the session (declare only once, just before use)
       const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
       if (session && session.peer && session.peer.metadata) {
-        const walletInfo: WalletInfo = {
-          name: session.peer.metadata.name,
-          description: session.peer.metadata.description,
-          url: session.peer.metadata.url
-        };
+        const { name = "Unknown", description, url } = session.peer.metadata;
+        const walletInfo = { name, description, url };
         // Only send detailed notification on initial connection
         if (!(window as any).__walletConnectNotified) {
           (window as any).__walletConnectNotified = true;
@@ -285,44 +282,31 @@ export const WalletConnectClient = () => {
             // ignore
           }
         }
-        // Get wallet info from the session
-        const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
-        if (session) {
-          const walletInfo: WalletInfo = {
-            name: session.peer.metadata.name,
-            description: session.peer.metadata.description,
-            url: session.peer.metadata.url
-          };
-          // setConnectedWallet(walletInfo);
-          if (session.peer.metadata.name === 'HashPack') {
-            const hederaAccounts = session.namespaces?.hedera?.accounts || [];
-            const targetAccount = hederaAccounts[0]; // Extract the first account in the array
-            // hc.openPairingModal();
-            if (targetAccount) {
-              const logString = JSON.stringify(targetAccount); // Convert object to string if necessary
-              const match = logString.match(/0\.0\.\d+/); // Regex to match IDs in the format 0.0.x
-              if (match) {
-                const accountID = match[0].split(".").pop();
-                dispatch(
-                  actions.hashconnect.setAccountIds(
-                    accountID ? [accountID] : []
-                  )
-                );
-                dispatch(actions.hashconnect.setIsConnected(true));
-                dispatch(actions.hashconnect.setPairingString('HashPack'));
-                // window.location.reload();
-                // syncWithHashConnect();
-                // handleAllowanceApprove(accountID as string)
-              } else {
-                console.error("Target ID not found.");
-              }
+        // setConnectedWallet(walletInfo); // If you want to store it in state
+        if (name === 'HashPack') {
+          const hederaAccounts = session.namespaces?.hedera?.accounts || [];
+          const targetAccount = hederaAccounts[0]; // Extract the first account in the array
+          if (targetAccount) {
+            const logString = JSON.stringify(targetAccount); // Convert object to string if necessary
+            const match = logString.match(/0\.0\.\d+/); // Regex to match IDs in the format 0.0.x
+            if (match) {
+              const accountID = match[0].split(".").pop();
+              dispatch(
+                actions.hashconnect.setAccountIds(
+                  accountID ? [accountID] : []
+                )
+              );
+              dispatch(actions.hashconnect.setIsConnected(true));
+              dispatch(actions.hashconnect.setPairingString('HashPack'));
             } else {
-              console.error("No account found in the logs.");
+              console.error("Target ID not found.");
             }
-            console.log('go to the syncWithHashConnect');
+          } else {
+            console.error("No account found in the logs.");
           }
-          console.log("Connected wallet:", walletInfo);
+          console.log('go to the syncWithHashConnect');
         }
+        console.log("Connected wallet:", walletInfo);
       } else {
         setAccountId('');
         setIsConnected(false);
