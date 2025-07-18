@@ -260,9 +260,6 @@
     })();
   </script>
   <script>
-    document.body.innerHTML += '<div style="color: green; font-size: 18px;">[DEBUG] Plain JS is running!</div>';
-  </script>
-  <script>
     window.onerror = function(message, source, lineno, colno, error) {
       document.body.innerHTML += '<div style="color: red; font-size: 18px; background: yellow;">[ERROR] ' + message + ' at ' + source + ':' + lineno + '</div>';
     };
