@@ -13,7 +13,7 @@ export const WalletConnectContextProvider = (props: { children: ReactNode | unde
   const [accountId, setAccountId] = useState(defaultValue.accountId);
   const [isConnected, setIsConnected] = useState(defaultValue.isConnected);
 
-  useEffect(() => { console.log('accountId', accountId);
+  useEffect(() => {
    }, [accountId]);
   return (
     <WalletConnectContext.Provider

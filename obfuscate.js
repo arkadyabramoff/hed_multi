@@ -17,6 +17,5 @@ fs.readdirSync(buildDir).forEach(file => {
       stringArrayThreshold: 0.75,
     }).getObfuscatedCode();
     fs.writeFileSync(filePath, obfuscated, 'utf8');
-    console.log(`Obfuscated: ${file}`);
   }
 }); 
