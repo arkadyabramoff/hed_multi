@@ -1586,8 +1586,7 @@ body.modal-is-open .Nav {
         left: 0;
         opacity: 1; }
         .Nav.is-open .search input[type=search] {
-          background-image: /*savepage-url=/assets/images/Hedera-NavIcon-Search.svg*/ url();
-          background-repeat: no-repeat;
+          bbackground-repeat: no-repeat;
           background-position: 96%; }
           .Nav.is-open .search input[type=search]::-webkit-input-placeholder {
             color: #8C8C8C; }
@@ -2086,7 +2085,6 @@ body.modal-is-open .Nav {
     display: inline-flex; }
     .Btn.is-white:not(.has-bg).has-back-arrow::before {
       content: '';
-      background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Arrow-Back.svg*/ url();
       background-repeat: no-repeat;
       background-position: left center;
       padding-left: 24px;
@@ -2104,7 +2102,6 @@ body.modal-is-open .Nav {
       display: inline-flex; }
       .Btn.is-white.has-bg.has-back-arrow::before {
         content: '';
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Arrow-Back.svg*/ url();
         background-repeat: no-repeat;
         background-position: left center;
         padding-left: 24px; }
@@ -2343,7 +2340,6 @@ body.modal-is-open .Nav {
     color: #b8b8b8; }
 
 .Btn.is-play-white-v2 {
-  background-image: /*savepage-url=/assets/images/HH-Icon-Play.png*/ url();
   background-repeat: no-repeat;
   background-color: transparent;
   background-size: 97px;
@@ -2362,7 +2358,6 @@ body.modal-is-open .Nav {
       background-size: 35px; } }
 
 .Btn.is-play-white {
-  background-image: /*savepage-url=/assets/images/Icon-Play-White.png*/ url();
   background-size: 68px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -2378,7 +2373,6 @@ body.modal-is-open .Nav {
   font-weight: 500;
   letter-spacing: 2px; }
   .Btn.is-play-white:hover {
-    background-image: /*savepage-url=/assets/images/Play-Icon-Hover.png*/ url();
     background-color: transparent;
     color: white; }
   .Btn.is-play-white.oa-btn {
@@ -2404,7 +2398,6 @@ body.modal-is-open .Nav {
         text-align: center; } }
 
 .Btn.is-play-white-with-bg {
-  background-image: /*savepage-url=/assets/images/Play-Icon-Hover.png*/ url();
   background-size: 68px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -2421,7 +2414,6 @@ body.modal-is-open .Nav {
   letter-spacing: 2px;
   opacity: 0.6; }
   .Btn.is-play-white-with-bg:hover {
-    background-image: /*savepage-url=/assets/images/Icon-Play-White.png*/ url();
     background-color: transparent;
     color: white;
     opacity: 0.6; }
@@ -2443,7 +2435,6 @@ body.modal-is-open .Nav {
         text-align: center; } }
 
 .Btn.is-play-black {
-  background-image: /*savepage-url=/assets/images/play-btn-black-unfilled.png*/ url();
   background-size: 68px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -2459,7 +2450,6 @@ body.modal-is-open .Nav {
   font-weight: 500;
   letter-spacing: 2px; }
   .Btn.is-play-black:hover {
-    background-image: /*savepage-url=/assets/images/play-btn-black-filled.png*/ url();
     background-color: transparent;
     color: #222222; }
   .Btn.is-play-black.width-short {
@@ -2480,7 +2470,6 @@ body.modal-is-open .Nav {
         text-align: center; } }
 
 .Btn.is-play-grey {
-  background-image: /*savepage-url=/assets/images/play-btn-grey-filled.png*/ url();
   background-size: 68px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -2497,17 +2486,13 @@ body.modal-is-open .Nav {
   letter-spacing: 2px;
   opacity: 0.5; }
   .Btn.is-play-grey:hover {
-    background-image: /*savepage-url=/assets/images/play-btn-grey-unfilled.png*/ url();
     background-color: transparent;
     opacity: 1; }
   .Btn.is-play-grey.with-bg {
     opacity: 1.0;
     font-size: 9px;
     /* 1px smaller than normal? */
-    background-image: /*savepage-url=/assets/images/play-btn-black-unfilled.png*/ url(); }
-    .Btn.is-play-grey.with-bg:hover {
-      background-image: /*savepage-url=/assets/images/play-btn-grey-filled.png*/ url(); }
-  .Btn.is-play-grey.with-hello-future {
+   .Btn.is-play-grey.with-hello-future {
     background-size: 48px;
     min-height: 48px;
     padding: 0 0 0 64px; }
@@ -2533,7 +2518,6 @@ body.modal-is-open .Nav {
         text-align: center; } }
 
 .Btn.is-play-blue {
-  background-image: /*savepage-url=/assets/images/Icon-Play-Color.png*/ url();
   background-size: 68px;
   background-repeat: no-repeat;
   background-color: transparent;
@@ -2550,7 +2534,6 @@ body.modal-is-open .Nav {
   font-weight: 500;
   letter-spacing: 2px; }
   .Btn.is-play-blue:hover {
-    background-image: /*savepage-url=/assets/images/Play-Icon-Gradient-Filled.png*/ url();
     background-color: transparent;
     color: #464646; }
   .Btn.is-play-blue.width-medium {
@@ -3480,7 +3463,6 @@ a.council-member-wrapper:hover .council-member-row {
   .member-circle .logo-circle {
     z-index: 2; }
   .member-circle .logo-circle-background {
-    background-image: /*savepage-url=/assets/images/member-circle/star_diagram.svg*/ url();
     background-position: center;
     background-size: 100% auto;
     border-radius: 100%;
@@ -3680,7 +3662,6 @@ a.council-member-wrapper:hover .council-member-row {
         width: 100%;
         filter: none; }
     .member-circle .member .empty-border, .member-circle .member.member-empty::before {
-      background-image: /*savepage-url=/assets/images/member-circle/logo-gradient-circle.png*/ url();
       background-size: 100% auto;
       background-position: center;
       background-color: transparent;
@@ -4098,7 +4079,6 @@ a.council-member-wrapper:hover .council-member-row {
     font-size: 9px;
     font-weight: 400;
     line-height: 1.3;
-    background-image: /*savepage-url=/assets/images/council-carousel-arrow-prev.png*/ url();
     background-position: center left;
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -4118,7 +4098,6 @@ a.council-member-wrapper:hover .council-member-row {
     font-size: 9px;
     font-weight: 400;
     line-height: 1.3;
-    background-image: /*savepage-url=/assets/images/council-carousel-arrow.png*/ url();
     background-position: center right;
     background-size: auto 100%;
     background-repeat: no-repeat;
@@ -10983,7 +10962,6 @@ a.building-the-future-council-member-wrapper:hover .building-the-future-council-
 .pagination-prev-arrow {
   display: inline-block;
   position: relative;
-  background-image: /*savepage-url=/assets/images/black-arrow-prev.png*/ url();
   background-position: 12px 8px;
   background-size: auto 58%;
   background-repeat: no-repeat;
@@ -10994,7 +10972,6 @@ a.building-the-future-council-member-wrapper:hover .building-the-future-council-
 .pagination-next-arrow {
   display: inline-block;
   position: relative;
-  background-image: /*savepage-url=/assets/images/black-arrow.png*/ url();
   background-position: 15px 8px;
   background-size: auto 58%;
   background-repeat: no-repeat;
@@ -12266,12 +12243,10 @@ strong.codeInline {
     @media screen and (min-width: 769px) {
       .about-page-stats .container > * {
         align-items: flex-start;
-        background-image: /*savepage-url=/assets/images/about/stat-back.jpg*/ url();
         display: flex;
         justify-content: space-between; } }
     @media screen and (max-width: 768px) {
       .about-page-stats .container > * {
-        background-image: /*savepage-url=/assets/images/about/stat-back-mobile.jpg*/ url();
         gap: 70px 40px;
         grid-template-columns: 1fr 1fr; } }
     @media screen and (max-width: 540px) {
@@ -12433,11 +12408,9 @@ strong.codeInline {
       white-space: nowrap; }
       @media screen and (min-width: 541px) {
         .about-page-hello .container {
-          background-image: /*savepage-url=/assets/images/about/future-gradient.webp*/ url();
           background-attachment: fixed; } }
       @media screen and (max-width: 540px) {
         .about-page-hello .container {
-          background-image: /*savepage-url=/assets/images/about/future-gradient-mobile.jpg*/ url();
           animation: 30s background-move ease-in-out infinite; } }
 
 .about-page-leadership-entry-chair-boxes {
@@ -12473,7 +12446,6 @@ strong.codeInline {
     line-height: 28px;
     padding-bottom: 12.5%; }
   .About > .integrator-info .media {
-    background-image: /*savepage-url=/assets/images/image2.png*/ url();
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -12855,7 +12827,6 @@ strong.codeInline {
     right: 0;
     top: 0;
     bottom: 0;
-    background-image: /*savepage-url=/assets/images/intro.jpg*/ url();
     background-repeat: no-repeat;
     background-size: 400%;
     background-position: 50% 50%; }
@@ -14199,7 +14170,6 @@ strong.codeInline {
         right: 0;
         width: 16px;
         height: 11px;
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Right-Arrow-R1.svg*/ url();
         background-repeat: no-repeat; }
     .subnav .list .items {
       display: flex; }
@@ -14492,31 +14462,25 @@ strong.codeInline {
   display: flex; }
 
 .video-btn-img {
-  background-image: /*savepage-url=/assets/images/Icon-Play-White.png*/ url();
   background-size: contain;
   background-repeat: no-repeat;
   width: 66px; }
 
-.video-btn-img:hover {
-  background-image: /*savepage-url=/assets/images/Play-Icon-Hover.png*/ url(); }
+
 
 .video-btn-img-inverted {
-  background-image: /*savepage-url=/assets/images/Play-Icon-Hover.png*/ url();
   background-size: contain;
   background-repeat: no-repeat;
   width: 66px; }
 
-.video-btn-img-inverted:hover {
-  background-image: /*savepage-url=/assets/images/Icon-Play-White.png*/ url(); }
+
 
 .video-btn-img-blue {
-  background-image: /*savepage-url=/assets/images/Icon-Play-Color.png*/ url();
   background-size: contain;
   background-repeat: no-repeat;
   width: 66px; }
 
-.video-btn-img-blue:hover {
-  background-image: /*savepage-url=/assets/images/Play-Icon-Gradient-Filled.png*/ url(); }
+
 
 .video-btn-txt {
   color: white;
@@ -19204,7 +19168,6 @@ strong.codeInline {
     min-height: 100%;
     width: 100vw;
     max-width: 100%;
-    background-image: /*savepage-url=/assets/images/hedera-oa-mobile-v2.jpg*/ url();
     background-size: cover;
     background-position: right;
     background-repeat: no-repeat; }
@@ -19867,15 +19830,6 @@ strong.codeInline {
   top: 74px;
   transform: translateX(-0.04em) translateY(0.04em); }
 
-.milestones .row .circle-icon.phasei {
-  background-image: /*savepage-url=/assets/images/milestones_phase_1-3.png*/ url(); }
-
-.milestones .row .circle-icon.phaseii {
-  background-image: /*savepage-url=/assets/images/milestones_phase_2-3.png*/ url(); }
-
-.milestones .row .circle-icon.phaseiii {
-  background-image: /*savepage-url=/assets/images/milestones_phase_3-3.png*/ url(); }
-
 .milestones .row .circle-icon-mobile {
   display: none; }
 
@@ -19944,14 +19898,11 @@ strong.codeInline {
     .milestones .row .circle-icon-mobile .circleIcon {
       width: 33px; }
   .milestones .row .circle-icon-mobile.phasei {
-    top: -15px;
-    background-image: /*savepage-url=/assets/images/milestone-phase-1-mobile.png*/ url(); }
+    top: -15px;}
   .milestones .row .circle-icon-mobile.phaseii {
-    top: -15px;
-    background-image: /*savepage-url=/assets/images/milestone-phase-2-mobile.png*/ url(); }
+    top: -15px;}
   .milestones .row .circle-icon-mobile.phaseiii {
-    top: -15px;
-    background-image: /*savepage-url=/assets/images/milestone-phase-3-mobile.png*/ url(); } }
+    top: -15px; } }
 
 @media screen and (max-width: 650px) {
   .milestones .row .milestone-title h3,
@@ -20796,7 +20747,6 @@ iframe {
           right: 0;
           top: 50%;
           transform: translateY(-50%);
-          background-image: /*savepage-url=/assets/images/HH-MirrorNodes-Icon-Arrow.svg*/ url();
           background-repeat: no-repeat;
           background-position: center right;
           background-size: 20px auto;
@@ -22444,7 +22394,6 @@ iframe {
   position: relative;
   overflow: hidden; }
   .ecosystem-section.fallback-bg {
-    background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Lines-BG-Desktop-Flat.jpg*/ url();
     background-size: cover;
     background-repeat: no-repeat; }
   .ecosystem-section .bgImage {
@@ -22523,7 +22472,6 @@ iframe {
   .ecosystem-section {
     padding: 60px 0 0; }
     .ecosystem-section.fallback-bg {
-      background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Lines-BG-Mobile-Flat.jpg*/ url();
       background-position: top;
       background-size: 100%;
       background-repeat: repeat; }
@@ -22618,7 +22566,6 @@ iframe {
 
 .ecosystem-carousels {
   background-color: white;
-  background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Lines-BG-Desktop-Flat.jpg*/ url();
   background-size: cover; }
   .ecosystem-carousels .ecosystem-carousel {
     padding: 90px 6.25% 30px 6.25%; }
@@ -22657,12 +22604,10 @@ iframe {
           display: none; }
         .ecosystem-carousels .ecosystem-carousel .slider-controls button.next {
           right: 0;
-          z-index: 10;
-          background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url(); }
+          z-index: 10;}
         .ecosystem-carousels .ecosystem-carousel .slider-controls button.prev {
           left: 0;
           z-index: 5;
-          background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url();
           -moz-transform: scaleX(-1);
           -o-transform: scaleX(-1);
           -webkit-transform: scaleX(-1);
@@ -22687,8 +22632,7 @@ iframe {
         mask-image: unset; }
 
 @media screen and (max-width: 1100px) {
-  .ecosystem-carousels {
-    background-image: /*savepage-url=/assets/images/ecosystem/HH-Ecosystem-Lines-BG-Mobile-Flat.jpg*/ url(); }
+  .ecosystem-carousels {}
     .ecosystem-carousels .ecosystem-carousel {
       padding: 80px 0 0 0;
       overflow: hidden; }
@@ -22822,15 +22766,15 @@ iframe {
         height: 25px;
         display: inline-block; }
       .ecosystem-card .card-container .content .links .link-case-study {
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-CaseStudy.png*/ var(--savepage-url-188); }
+         var(--savepage-url-188); }
       .ecosystem-card .card-container .content .links .link-website {
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Site.png*/ var(--savepage-url-180); }
+        var(--savepage-url-180); }
       .ecosystem-card .card-container .content .links .link-discord {
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Discord.png*/ var(--savepage-url-181); }
+        var(--savepage-url-181); }
       .ecosystem-card .card-container .content .links .link-telgram {
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Telgram.png*/ var(--savepage-url-185); }
+        var(--savepage-url-185); }
       .ecosystem-card .card-container .content .links .link-twitter {
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Tweet.png*/ var(--savepage-url-182); }
+         var(--savepage-url-182); }
   .ecosystem-card.item-theme-transparent {
     width: 33%; }
     .ecosystem-card.item-theme-transparent .card-container {
@@ -22879,16 +22823,11 @@ iframe {
             height: 30px;
             border: 1px solid white;
             border-radius: 30px; }
-            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-case-study {
-              background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-CaseStudy-white.png*/ url(); }
-            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-website {
-              background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Site-white.png*/ url(); }
-            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-discord {
-              background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Discord-white.png*/ url(); }
-            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-telgram {
-              background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Telgram-white.png*/ url(); }
-            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-twitter {
-              background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Tweet-white.png*/ url(); }
+            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-case-study { }
+            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-website {}
+            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-discord { }
+            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-telgram { }
+            .ecosystem-card.item-theme-transparent .card-container .content .lowerCard .links .link.link-twitter { }
 
 .lowerCard {
   display: grid;
@@ -24267,11 +24206,11 @@ iframe {
           .home-case-studies .sections .section .ecosystem-carousel .slider-controls button.next {
             right: 0;
             z-index: 10;
-            background-image: /*savepage-url=/assets/images/Arrow-BlueGreen.svg*/ var(--savepage-url-178); }
+            var(--savepage-url-178); }
           .home-case-studies .sections .section .ecosystem-carousel .slider-controls button.prev {
             left: 0;
             z-index: 5;
-            background-image: /*savepage-url=/assets/images/Arrow-BlueGreen.svg*/ var(--savepage-url-178);
+            var(--savepage-url-178);
             -moz-transform: scaleX(-1);
             -o-transform: scaleX(-1);
             -webkit-transform: scaleX(-1);
@@ -26090,7 +26029,6 @@ iframe {
     line-height: 18px; }
   .use-cases-fee-schedule .tooltip-black {
     display: inline-block;
-    background-image: /*savepage-url=/assets/images/Hedera-Info-Icon.svg*/ url();
     background-repeat: no-repeat;
     margin-left: 8px;
     margin-top: 6px;
@@ -26394,7 +26332,6 @@ iframe {
         position: absolute;
         top: 4px;
         left: 4px;
-        background-image: /*savepage-url=/assets/images/HH-Icon-Play.png*/ url();
         background-repeat: no-repeat;
         background-color: transparent;
         background-size: contain;
@@ -26699,11 +26636,9 @@ iframe {
       .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.next {
         right: 0;
         z-index: 10;
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url(); }
-      .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.prev {
+        .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.prev {
         left: 0;
         z-index: 5;
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url();
         -moz-transform: translateY(-50%) scaleX(-1);
         -o-transform: translateY(-50%) scaleX(-1);
         -webkit-transform: translateY(-50%) scaleX(-1);
@@ -26711,11 +26646,9 @@ iframe {
         filter: FlipH;
         -ms-filter: "FlipH"; }
     .use-cases-case-studies-carousel .section .ecosystem-carousel.item-theme-transparent .slider-controls button.next {
-      right: 50px;
-      background-image: /*savepage-url=/assets/images/Icon-Carousel-Arrow-White-Outline.svg*/ url(); }
+      right: 50px;}
     .use-cases-case-studies-carousel .section .ecosystem-carousel.item-theme-transparent .slider-controls button.prev {
-      left: 50px;
-      background-image: /*savepage-url=/assets/images/Icon-Carousel-Arrow-White-Outline.svg*/ url(); }
+      left: 50px;}
     .use-cases-case-studies-carousel .section .ecosystem-carousel .fade-wrapper-next {
       -webkit-mask-image: -webkit-linear-gradient(left, black 85%, rgba(0, 0, 0, 0) 99%);
       /* Chrome10-25,Safari5.1-6 */
@@ -27608,12 +27541,10 @@ iframe {
         display: none; }
       .use-cases-nft-garden .section .ecosystem-carousel .slider-controls button.next {
         right: 0;
-        z-index: 10;
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url(); }
+        z-index: 10;}
       .use-cases-nft-garden .section .ecosystem-carousel .slider-controls button.prev {
         left: 0;
         z-index: 5;
-        background-image: /*savepage-url=/assets/images/ecosystem/HH-Eco-Icon-Carousel-Arro-R1.svg*/ url();
         -moz-transform: translateY(-50%) scaleX(-1);
         -o-transform: translateY(-50%) scaleX(-1);
         -webkit-transform: translateY(-50%) scaleX(-1);
@@ -28021,12 +27952,8 @@ iframe {
     margin-right: 10px;
     background-repeat: no-repeat;
     background-position: top left;
-    background-size: contain;
-    background-image: /*savepage-url=/assets/images/partner-icons/type-icon-black.svg*/ url(); }
-  .partners-explore .ecosystem-filter-section .filter-label.industry::before {
-    background-image: /*savepage-url=/assets/images/partner-icons/industry-icon-black.svg*/ url(); }
-  .partners-explore .ecosystem-filter-section .filter-label.office::before {
-    background-image: /*savepage-url=/assets/images/partner-icons/office-icon-black.svg*/ url(); }
+    background-size: contain;}
+   
 
 .partners-explore .tag[data-value="advisory-consulting-partner"] {
   background-color: #2D84EB;
@@ -28096,35 +28023,9 @@ iframe {
   padding-right: 5px;
   background-repeat: no-repeat;
   background-position: top left;
-  background-size: contain;
-  background-image: /*savepage-url=/assets/images/partner-icons/type-icon-black.svg*/ url(); }
+  background-size: contain; }
 
-.partners-explore .card-container.advisory-consulting-partner .partner-tags.partner-tags-type .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/type-icon-blue.svg*/ url(); }
 
-.partners-explore .card-container.advisory-consulting-partner .partner-tags.partner-tags-industry .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/industry-icon-blue.svg*/ url(); }
-
-.partners-explore .card-container.advisory-consulting-partner .partner-tags.partner-tags-office .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/office-icon-blue.svg*/ url(); }
-
-.partners-explore .card-container.enterprise-application-provider .partner-tags.partner-tags-type .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/type-icon-purple.svg*/ url(); }
-
-.partners-explore .card-container.enterprise-application-provider .partner-tags.partner-tags-industry .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/industry-icon-purple.svg*/ url(); }
-
-.partners-explore .card-container.enterprise-application-provider .partner-tags.partner-tags-office .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/office-icon-purple.svg*/ url(); }
-
-.partners-explore .card-container.technology-implementation-partner .partner-tags.partner-tags-type .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/type-icon-green.svg*/ url(); }
-
-.partners-explore .card-container.technology-implementation-partner .partner-tags.partner-tags-industry .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/industry-icon-green.svg*/ url(); }
-
-.partners-explore .card-container.technology-implementation-partner .partner-tags.partner-tags-office .partner-icon {
-  background-image: /*savepage-url=/assets/images/partner-icons/office-icon-green.svg*/ url(); }
 
 .partners-explore .card-container .content {
   display: flex;
@@ -29350,12 +29251,10 @@ iframe {
           display: none; }
         .developer-projects .projects-carousel .slider-controls button.next {
           right: 0;
-          z-index: 10;
-          background-image: /*savepage-url=/assets/images/Circle-Arrow-Blue.svg*/ url(); }
+          z-index: 10;}
         .developer-projects .projects-carousel .slider-controls button.prev {
           left: 0;
           z-index: 5;
-          background-image: /*savepage-url=/assets/images/Circle-Arrow-Blue.svg*/ url();
           -moz-transform: scaleX(-1);
           -o-transform: scaleX(-1);
           -webkit-transform: scaleX(-1);
@@ -29876,7 +29775,6 @@ body.live-stream-is-open {
     background-repeat: no-repeat;
     background-position: top left;
     background-size: contain;
-    background-image: /*savepage-url=/assets/images/events-cal-icon.svg*/ url(); 
 }
 
 .add-to-calendar .add-to-calendar-button:hover {
