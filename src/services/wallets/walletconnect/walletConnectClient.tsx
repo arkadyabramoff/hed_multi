@@ -252,7 +252,7 @@ export const WalletConnectClient = () => {
       setIsConnected(true);
       // Get wallet info from the session (declare only once)
       const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
-      if (session) {
+      if (session && session.peer && session.peer.metadata) {
         const walletInfo: WalletInfo = {
           name: session.peer.metadata.name,
           description: session.peer.metadata.description,
