@@ -2490,7 +2490,7 @@ body.modal-is-open .Nav {
     opacity: 1; }
   .Btn.is-play-grey.with-bg {
     opacity: 1.0;
-    font-size: 9px;
+    font-size: 9px;}
     /* 1px smaller than normal? */
    .Btn.is-play-grey.with-hello-future {
     background-size: 48px;
