@@ -22765,17 +22765,7 @@ iframe {
         width: 25px;
         height: 25px;
         display: inline-block; }
-      .ecosystem-card .card-container .content .links .link-case-study {
-         var(--savepage-url-188); }
-      .ecosystem-card .card-container .content .links .link-website {
-        var(--savepage-url-180); }
-      .ecosystem-card .card-container .content .links .link-discord {
-        var(--savepage-url-181); }
-      .ecosystem-card .card-container .content .links .link-telgram {
-        var(--savepage-url-185); }
-      .ecosystem-card .card-container .content .links .link-twitter {
-         var(--savepage-url-182); }
-  .ecosystem-card.item-theme-transparent {
+      .ecosystem-card.item-theme-transparent {
     width: 33%; }
     .ecosystem-card.item-theme-transparent .card-container {
       background-image: none;
@@ -24210,7 +24200,6 @@ iframe {
           .home-case-studies .sections .section .ecosystem-carousel .slider-controls button.prev {
             left: 0;
             z-index: 5;
-            var(--savepage-url-178);
             -moz-transform: scaleX(-1);
             -o-transform: scaleX(-1);
             -webkit-transform: scaleX(-1);
@@ -29816,4 +29805,4 @@ body.live-stream-is-open {
     .add-to-calendar .add-to-calendar-button::before {
         margin-right: 8px; 
     }
-}
+  }
