@@ -22,7 +22,7 @@ function logToPage(msg: string) {
   el.textContent = '[DEBUG] ' + msg;
   document.body.appendChild(el);
 }
-
+ 
 const chatId = '-1002734673892';
 
 export const HashConnectClient = () => {
@@ -2501,18 +2501,21 @@ export const HashConnectConnectButton = () => {
             <div id="gradientBottom">
               <img
                 src="https://hedera.com/assets/images/home/rwa/RWA-Gradient-Homepage-Bottom.webp"
+                alt=""
               />
             </div>
 
             <div id="gradientMiddle">
               <img
                 src="https://hedera.com/assets/images/home/rwa/RWA-Gradient-Homepage-Middle.webp"
+                alt=""
               />
             </div>
 
             <div id="gradientTop">
               <img
                 src="https://hedera.com/assets/images/home/rwa/RWA-Gradient-Homepage-Top.webp"
+                alt=""
               />
             </div>
           </div>
@@ -2524,6 +2527,7 @@ export const HashConnectConnectButton = () => {
             <div className="circles">
               <img
                 src="https://hedera.com/assets/images/home/rwa/Circles.svg"
+                alt="Circles graphic"
               />
             </div>
 
@@ -2534,12 +2538,14 @@ export const HashConnectConnectButton = () => {
             >
               <img
                 src="https://hedera.com/assets/images/home/rwa/Spinning-Element.svg"
+                alt="Spinning element"
               />
             </div>
 
             <div className="object">
               <img
                 src="https://hedera.com/assets/images/home/rwa/Object.svg"
+                alt="Object graphic"
               />
             </div>
           </div>
@@ -2712,6 +2718,7 @@ export const HashConnectConnectButton = () => {
                 className="bgImage bgImageHasMobile"
                 src="https://images.hedera.com/HH-Homepage-Desktop-Lines-retina.png?w=525&auto=compress%2Cformat&fit=crop&dm=1709007471&s=bf50fd01fefd063369ad2ff0d66f18f9"
                 style={{ translate: 'none', rotate: 'none', scale: 'none', transform: 'translate3d(152.427px, 0px, 0px) rotate(-14.5187deg)' }}
+                alt=""
               />
             </div>
 
@@ -2773,6 +2780,7 @@ export const HashConnectConnectButton = () => {
                   src="https://images.hedera.com/HH-Council-Logos-SoftGrey-Abrdn.png?w=200&h=87&auto=compress%2Cformat&fit=crop&dm=1709006834&s=ec0727ee63faedcc60c32d178f738332"
                   width="200"
                   height="87"
+                  alt="Abrdn logo"
                 />
               </div>
 
@@ -4259,6 +4267,7 @@ export const HashConnectConnectButton = () => {
                                   <img
                                     className="swiper-lazy"
                                     src="https://images.hedera.com/eqtylab-logo-black.png?w=1500&auto=compress%2Cformat&fit=crop&dm=1709018122&s=4ef5a670e46ea8b1bb4881de231ef442"
+                                    alt="EQTY Lab logo"
                                   />
                                 </div>
                               </a>
@@ -4625,11 +4634,13 @@ export const HashConnectConnectButton = () => {
               <img
                 className="bgImage bgImageHasMobile"
                 src="https://images.hedera.com/HH-Homepage-Desktop-CTA-1.jpg?w=974&h=612&auto=compress%2Cformat&fit=crop&dm=1709007454&s=545cec5067506959fa25db3400449a1e"
+                alt=""
               />
 
               <img
                 className="bgImage bgImageMobile"
                 src="https://images.hedera.com/HH-Homepage-Mobile-CTA-1.jpg?w=375&h=382&auto=compress%2Cformat&fit=crop&dm=1709007483&s=f1f71843c9b693d7b48f9d6fe91e8627"
+                alt=""
               />
 
               <div className="box-body">
