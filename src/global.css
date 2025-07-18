@@ -24195,8 +24195,7 @@ iframe {
             display: none; }
           .home-case-studies .sections .section .ecosystem-carousel .slider-controls button.next {
             right: 0;
-            z-index: 10;
-            var(--savepage-url-178); }
+            z-index: 10;}
           .home-case-studies .sections .section .ecosystem-carousel .slider-controls button.prev {
             left: 0;
             z-index: 5;
