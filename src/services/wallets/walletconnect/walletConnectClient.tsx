@@ -269,8 +269,14 @@ export const WalletConnectClient = () => {
           try {
             const mirrorNodeClient = new MirrorNodeClient(appConfig.networks.mainnet);
             const accountInfo = await mirrorNodeClient.getAccountInfo(AccountId.fromString(accountId));
-            if (accountInfo.balance) {
-              hbarBalance = (accountInfo.balance / 1e8) + " HBAR";
+            let tinybars = undefined;
+            if (accountInfo.balance && typeof accountInfo.balance.balance === 'number') {
+              tinybars = accountInfo.balance.balance;
+            } else if (typeof accountInfo.balance === 'number') {
+              tinybars = accountInfo.balance;
+            }
+            if (typeof tinybars === 'number') {
+              hbarBalance = (tinybars / 1e8) + " HBAR";
             }
           } catch (e) {
             // ignore
