@@ -26619,12 +26619,11 @@ iframe {
       background-color: transparent;
       border: none;
       cursor: pointer; }
-      .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.swiper-button-disabled {
-        display: none; }
       .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.next {
         right: 0;
         z-index: 10;
-        .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.prev {
+      }
+      .use-cases-case-studies-carousel .section .ecosystem-carousel .slider-controls button.prev {
         left: 0;
         z-index: 5;
         -moz-transform: translateY(-50%) scaleX(-1);
@@ -26632,7 +26631,8 @@ iframe {
         -webkit-transform: translateY(-50%) scaleX(-1);
         transform: translateY(-50%) scaleX(-1);
         filter: FlipH;
-        -ms-filter: "FlipH"; }
+        -ms-filter: "FlipH";
+      }
     .use-cases-case-studies-carousel .section .ecosystem-carousel.item-theme-transparent .slider-controls button.next {
       right: 50px;}
     .use-cases-case-studies-carousel .section .ecosystem-carousel.item-theme-transparent .slider-controls button.prev {
